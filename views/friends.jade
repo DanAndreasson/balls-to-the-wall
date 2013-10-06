@@ -1,0 +1,14 @@
+extends layout
+block content
+  .container
+    #profile-header
+      img.profile-avatar(src="#{user.picture}")
+  .container
+    .well
+      h1 They're only virtual friends anyway
+    #friends
+      each friend in friends
+        .friend
+          a.friend-name(href="/user/#{friend._id}") #{friend.name}
+            .friend-ball(style="background-image: url('#{friend.picture}')")
+

@@ -1,13 +1,55 @@
 doctype 5
-html
+html(lang='en')
   head
-    title= title
-    link(rel='stylesheet', href='/bootstrap/css/bootstrap.min.css')
-    link(rel='stylesheet', href='/bootstrap/css/bootstrap-responsive.min.css')
-    link(rel='stylesheet', href='/stylesheets/style.css')
-    script(src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
-    script(src='/bootstrap/js/bootstrap.min.js')
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(name='description', content='')
+    meta(name='author', content='')
+    title=title
+    link(href='/bootstrap/css/bootstrap.min.css', rel='stylesheet')
 
-    link(rel='stylesheet', href='/stylesheets/style.css')
+
+    //if lt IE 9
+      script(src='../../assets/js/html5shiv.js')
+      script(src='../../assets/js/respond.min.js')
+    script(src='http://code.jquery.com/jquery-1.10.1.min.js')
+    script(src='/bootstrap/js/bootstrap.min.js')
+    script(src='/javascripts/login-logout.js')
+    script(src='/javascripts/balls.js')
+    link(href='/stylesheets/style.css', rel='stylesheet')
+    script(src='/javascripts/search.js')
   body
+    .navbar.navbar-fixed-top.navbar-inverse(role='navigation')
+      .container
+        .navbar-header
+          a.navbar-brand(href='/') Balls to the Wall
+        .collapse.navbar-collapse
+          ul.nav.navbar-nav
+            li.active
+              a(href='/') Wall
+            li
+              a(href='/friends') Friends
+            li
+              a(href='#about') My Profile
+            li
+              a(href='#contact') Contact
+          if user
+            .navbar-right
+              button.btn.btn-danger#logout(type='button') Log out
+            .navbar-form.navbar-left#search_field
+              .form-group
+                input.form-control#search-input(name='search_field', type="text", placeholder="Eg. Dan Andreasson")
+              button.btn#search-button(type="button") Search
+              #search-results
+                button(type="button" class="close" aria-hidden="true") &times
+                #search-cleaner
+          else
+            form.navbar-form.navbar-right#login-form
+              .form-group
+                input.form-control(name="email", type='text', placeholder='Email@Liu.se')
+              .form-group
+                input.form-control(name="password", type='password', placeholder='Password')
+              button.btn.btn-success(type='submit') Sign in
+              button.btn.btn-primary(type='button') Sign up
+              .nav-collapse
     block content

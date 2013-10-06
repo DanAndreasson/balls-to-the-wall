@@ -1,0 +1,36 @@
+extends layout
+block content
+  .container
+    #profile-header
+      img.profile-avatar(src="#{user.picture}")
+
+  .container
+    #friend-error.alert.alert-danger(style="display: none;") Something went wrong. Try again later
+  .container
+    .jumbotron
+      #user-data(style="display: none;", data-id="#{id}")
+      h1 #{user_profile.name}
+      p This dude or dudette is a mean motherfucker
+      if friends
+        button.btn.btn-danger#unfriend(type='button') Unfriend
+
+      else
+        button.btn.btn-success#befriend(type='button') Befriend
+    .container
+      if friends
+        #balls
+          - each ball in balls
+            .ball
+              .message #{ball.message}
+
+
+    row
+    hr
+    footer
+      p © Balls to the Wall 2013
+
+  script(src='/javascripts/user.js')
+
+  script(src='/bootstrap/js/bootstrap.min.js')
+
+

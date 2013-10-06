@@ -1,17 +1,42 @@
 extends layout
-
 block content
   .container
-    .starter-template
+    #login-error-400.alert.alert-danger(style="display: none;") Wrong email and/or password!
+    #login-error-500.alert.alert-danger(style="display: none;") Something went wrong at the server. Error 500
+  .container
+    .jumbotron
       h1 Balls to the Wall
-      p.lead
-        | This project will blow your... mind
-        br
-        | Bootstrap is fabolous
+      p This is a place to share your balls of ideas.
+
+    .alert.alert-danger#register-error-password(style="display: none;") Password does not match
+
+    form.form-horizontal(role='form')#register-form
+      .form-group
+        label.col-lg-2.control-label(for='Name') Name
+        .col-lg-6
+          input.form-control(name="name", type='text', placeholder='Dan Andreasson')
+      .form-group
+        label.col-lg-2.control-label(for='Email') Email
+        .col-lg-6
+          input.form-control(name="email", type='email', placeholder='Email@liu.se')
+      .form-group
+        label.col-lg-2.control-label(for='Password') Password
+        .col-lg-6
+          input.form-control(name="password", type='password', placeholder='Password')
+      .form-group
+        label.col-lg-2.control-label(for='PasswordAgain') Password again
+        .col-lg-6
+          input.form-control(name="password_again", type='password', placeholder='Password')
+      .form-group
+        .col-lg-offset-2.col-lg-6
+          button.btn.btn-default(type='submit') Sign me up!
+
+    hr
+    footer
+      p © Balls to the Wall 2013
 
 
 
-
-
-
-  div.footer
+  //Placed at the end of the document so the pages load faster
+  script(src='/bootstrap/js/bootstrap.min.js')
+  script(src='/javascripts/login-logout.js')
