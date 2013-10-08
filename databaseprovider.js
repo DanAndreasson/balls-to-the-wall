@@ -128,8 +128,8 @@ Database.prototype.searchUsers = function(search_term, callback){
     this.getUsersCollection(function(error, user_collection) {
         if( error ) callback(error)
         else {
-            var search_regex = new RegExp(search_term);
-            user_collection.find({email: search_regex}).toArray(function(error, result){
+            var search_regex = new RegExp(search_term, 'i');
+            user_collection.find({name: search_regex}).toArray(function(error, result){
                 console.log(result);
                 if( error ) callback(error)
                 else callback(null, result)
