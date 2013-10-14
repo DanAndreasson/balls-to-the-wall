@@ -25,14 +25,15 @@ var search = function(){
     $.get('/search', {search_term: search_term}, function(data){
         if (data.length != 0){
             for (var i=0; i<data.length; ++i){
-                $('#search-cleaner').append($(document.createElement('a')).attr('href', '/user/'+data[i]._id).text(data[i].name)
-                    .addClass('search-result'));
+                var result = $('#search-result-template').clone().removeAttr('id').show();
+                result.find('.search-user-link').text(data[i].name).attr('href', '/user/' + data[i]._id);
+                $('#search-cleaner').append(result);
             }
             $('#search-results').slideDown();
         }else{
-            $('#search-cleaner').append($(document.createElement('a')).attr('href', '#No-user..FOOL').text('No results..')
-                .addClass('search-result'));
-            $('#search-results').slideDown();
+            var result = $('#search-result-template').clone().removeAttr('id').show();
+            result.find('.search-user-link').text('No result!').attr('href', '/user/#Nothing_here-FOOL');
+            $('#search-cleaner').append(result);
         }
 
 

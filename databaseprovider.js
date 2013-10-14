@@ -97,15 +97,19 @@ Database.prototype.getBallsByuser = function(user_id, callback){
         if( error ) callback(error)
         else {
             console.log(user_id);
-            ball_collection.find({created_by: user_id},function(err, unsorted_balls){
-                unsorted_balls.sort({created_at: -1},function(err, balls){
-                    balls.toArray(function(error, results) {
-                        if( error ) callback(error)
-                        else callback(null, results)
+            ball_collection.find(
+                {$or:[
+                    {receiver: user_id},
+                    {created_by: user_id}
+                ]},
+                function(err, unsorted_balls){
+                    unsorted_balls.sort({created_at: -1},function(err, balls){
+                        balls.toArray(function(error, results) {
+                            if( error ) callback(error)
+                            else callback(null, results)
+                        });
                     });
-                });
-
-            })
+                })
         }
     });
 };
@@ -134,6 +138,16 @@ Database.prototype.searchUsers = function(search_term, callback){
                 if( error ) callback(error)
                 else callback(null, result)
             });
+        }
+    });
+};
+
+Database.prototype.add_ball= function(ball, callback){
+    this.getBallsCollection(function(error, ball_collection){
+        if ( error ) callback(error)
+        else {
+            ball_collection.insert(ball);
+            callback(null, ball);
         }
     });
 };

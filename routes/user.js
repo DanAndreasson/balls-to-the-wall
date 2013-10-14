@@ -3,6 +3,26 @@
  * GET users listing.
  */
 
+
+exports.add_ball_to_user = function(req, res){
+    if (!req.session.user){
+        res.send('Not logged in or not friends', 400);
+        return ;
+    }
+    var ball = {};
+    ball.receiver = new BSON.ObjectID(req.body.receiver_id);
+    ball.message = req.body.message;
+    ball.created_by = req.session.user.id;
+    ball.created_at = new Date();
+    database.add_ball(ball, function(err, ball){
+        if ( !err ){
+            res.send(ball, 200);
+        }else{
+            res.send('Something went wrong!', 500);
+        }
+    });
+};
+
 exports.show = function(req, res){
     if (!req.session.user){
         res.redirect('/');
@@ -14,7 +34,7 @@ exports.show = function(req, res){
         if (user){
             var friends_or_not = inObject(req.session.user.friends, oid)
             if (friends_or_not){
-                database.getBallsByuser(id, function(err, balls){
+                database.getBallsByuser(oid, function(err, balls){
                     if (!err){
                         console.log(balls);
                         res.render('profile',

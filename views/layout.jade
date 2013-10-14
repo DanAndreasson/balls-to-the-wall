@@ -32,7 +32,7 @@ html(lang='en')
             li
               a(href='#about') My Profile
             li
-              a(href='#contact') Contact
+              a(href='#contact') Chat
           if user
             .navbar-right
               button.btn.btn-danger#logout(type='button') Log out
@@ -42,7 +42,11 @@ html(lang='en')
               button.btn#search-button(type="button") Search
               #search-results
                 button(type="button" class="close" aria-hidden="true") &times
+                .search-result#search-result-template
+                  a.search-user-link(href="#LOL") Test
+                  .glyphicon.glyphicon-comment.pull-right
                 #search-cleaner
+
           else
             form.navbar-form.navbar-right#login-form
               .form-group

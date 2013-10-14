@@ -11,11 +11,19 @@ block content
       #user-data(style="display: none;", data-id="#{id}")
       h1 #{user_profile.name}
       p This dude or dudette is a mean motherfucker
-      if friends
-        button.btn.btn-danger#unfriend(type='button') Unfriend
-
-      else
-        button.btn.btn-success#befriend(type='button') Befriend
+      #profile-buttons
+        if friends
+          button.btn.btn-danger#unfriend(type='button') Unfriend
+          button.btn.btn-primary#drop-a-ball(type='button') Drop a Ball
+          button.btn.btn-primary#chat(type='button') Chattering
+        else
+          button.btn.btn-success#befriend(type='button') Befriend
+    .container#ball-workshop
+     .form-group
+        label(for='message-input') Declare war, express your feelings or say what you have to say. No Bieber-talk whatsoever.
+        textarea.form-control#message-input(placeholder='Your 140 ball message')
+        button.btn.btn-primary#ball-ready(type="button") Ball is ready for takeoff
+        button.btn.btn-danger#ball-abort(type="button") Abort mission, this is madness!!
     .container
       if friends
         #balls
