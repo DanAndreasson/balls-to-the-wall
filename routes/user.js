@@ -10,9 +10,10 @@ exports.add_ball_to_user = function(req, res){
         return ;
     }
     var ball = {};
-    ball.receiver = new BSON.ObjectID(req.body.receiver_id);
+    if (req.body.receiver_id != 0)
+        ball.receiver = new BSON.ObjectID(req.body.receiver_id);
     ball.message = req.body.message;
-    ball.created_by = req.session.user.id;
+    ball.created_by = new BSON.ObjectID(req.session.user.id);
     ball.created_at = new Date();
     database.add_ball(ball, function(err, ball){
         if ( !err ){
@@ -23,7 +24,7 @@ exports.add_ball_to_user = function(req, res){
     });
 };
 
-exports.show = function(req, res){
+exports.profile = function(req, res){
     if (!req.session.user){
         res.redirect('/');
         return ;
@@ -34,7 +35,7 @@ exports.show = function(req, res){
         if (user){
             var friends_or_not = inObject(req.session.user.friends, oid)
             if (friends_or_not){
-                database.getBallsByuser(oid, function(err, balls){
+                database.getBallsByUser(oid, function(err, balls){
                     if (!err){
                         console.log(balls);
                         res.render('profile',

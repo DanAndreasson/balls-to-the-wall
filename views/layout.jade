@@ -15,25 +15,33 @@ html(lang='en')
     script(src='http://code.jquery.com/jquery-1.10.1.min.js')
     script(src='/bootstrap/js/bootstrap.min.js')
     script(src='/javascripts/login-logout.js')
-    script(src='/javascripts/balls.js')
     link(href='/stylesheets/style.css', rel='stylesheet')
-    script(src='/javascripts/search.js')
+    if user
+      script(src='http://localhost:3000/socket.io/socket.io.js')
+      script(src='/javascripts/balls.js')
+      script(src='/javascripts/search.js')
+      script(src='/javascripts/chat.js')
+
+
   body
+    if user
+      #user-data(data-id="#{user.id}", style="display: none;")
     .navbar.navbar-fixed-top.navbar-inverse(role='navigation')
       .container
         .navbar-header
           a.navbar-brand(href='/') Balls to the Wall
         .collapse.navbar-collapse
-          ul.nav.navbar-nav
-            li.active
-              a(href='/') Wall
-            li
-              a(href='/friends') Friends
-            li
-              a(href='#about') My Profile
-            li
-              a(href='#contact') Chat
           if user
+            ul.nav.navbar-nav
+              li(js-nav="")
+                a(href='/') Wall
+              li(js-nav="friends")
+                a(href='/friends') Friends
+              li(js-nav="user")
+                a(href='/user/#{user.id}') My Profile
+              li(js-nav="chat")
+                a(href='/chat') Chat
+
             .navbar-right
               button.btn.btn-danger#logout(type='button') Log out
             .navbar-form.navbar-left#search_field
@@ -43,8 +51,8 @@ html(lang='en')
               #search-results
                 button(type="button" class="close" aria-hidden="true") &times
                 .search-result#search-result-template
-                  a.search-user-link(href="#LOL") Test
-                  .glyphicon.glyphicon-comment.pull-right
+                  a.search-user-link(href="#placeholder") placeholder
+                  .glyphicon.glyphicon-comment.pull-right.start-chat
                 #search-cleaner
 
           else
@@ -57,3 +65,21 @@ html(lang='en')
               button.btn.btn-primary(type='button') Sign up
               .nav-collapse
     block content
+
+    if (user)
+      #chat-container
+        #idle-chats
+          //.idle-chat.rotate.active(data-with="martin")
+            | Martin
+          //.idle-chat.rotate(data-with="Morja")
+            | Morja
+        #chats
+
+
+      #chat-template
+        .chat(data-with="" data-id="" style="display: none;")
+          h1.chat-head
+          .message-container
+          .chat-input-container
+            textarea.form-control.chat-input
+            button.btn.btn-primary.chat-post(type="button") Send message

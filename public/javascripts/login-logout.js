@@ -1,8 +1,7 @@
 $(function() {
+    fixActiveNav();
     $('#login-form').on('submit', function(e){
         e.preventDefault();
-        var email;
-        var password;
         $.get('/login',$(this).serialize(),function(data, response, id){
             location.reload();
         }).fail(function(data, response,status){
@@ -15,7 +14,6 @@ $(function() {
         return false;
     });
     $('body').on('click','#logout', function(){
-        console.log('ALUL');
         $.get('/logout', function(){
             location.reload();
         });
@@ -40,4 +38,14 @@ $(function() {
         return false;
     });
 
+    /*$('.nav li').on('click', function(){
+        $('.active').removeClass('active');
+        $(this).addClass('active');
+    });*/
 });
+
+var fixActiveNav = function(){
+    var first_path = window.location.pathname.split('/')[1];
+    $('.nav li[js-nav="'+ first_path +'"]').addClass('active');
+
+};

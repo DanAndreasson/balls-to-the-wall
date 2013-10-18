@@ -7,40 +7,18 @@ block content
     .jumbotron
       h1 Balls to the Wall
       p Share you thoughts.. in balls..
+      button.btn.btn-primary#drop-a-ball(type="button") I'll share some thoughts
+    .container#ball-workshop
+      .form-group
+        label(for='message-input') Declare war, express your feelings or say what you have to say. No Bieber-talk whatsoever.
+        textarea.form-control#message-input(placeholder='Your 140 ball message')
+        button.btn.btn-primary#ball-ready(type="button") Ball is ready for takeoff
+        button.btn.btn-danger#ball-abort(type="button") Abort mission, this is madness!!
     .container
       #balls
-        .ball
-          .message Tjena en penis  asd asd asdas d asd asd asd asd asd asdas dqedqwd qsdsadasd asdsad
-        .ball
-          .message Ett kortare
-        .ball
-          .message En mellanlång rackare! Ytterst sällsynt med dessa mellanlånga
-        .ball
-          .message O dra mig baklänges på en cykel, detta var mig ett riktigt långt och oläsbart meddlenade! Fyskäms den som skrev detta bedrövliga meddelande!!
-        .ball
-          .message Tjena en penis  asd asd asdas d asd asd asd asd asd asdas dqedqwd qsdsadasd asdsad
-        .ball
-          .message Ett kortare
-        .ball
-          .message En mellanlång rackare! Ytterst sällsynt med dessa mellanlånga
-        .ball
-          .message O dra mig baklänges på en cykel, detta var mig ett riktigt långt och oläsbart meddlenade! Fyskäms den som skrev detta bedrövliga meddelande!!
-        .ball
-          .message Tjena en penis  asd asd asdas d asd asd asd asd asd asdas dqedqwd qsdsadasd asdsad
-        .ball
-          .message Ett kortare
-        .ball
-          .message En mellanlång rackare! Ytterst sällsynt med dessa mellanlånga
-        .ball
-          .message O dra mig baklänges på en cykel, detta var mig ett riktigt långt och oläsbart meddlenade! Fyskäms den som skrev detta bedrövliga meddelande!!
-        .ball
-          .message Tjena en penis  asd asd asdas d asd asd asd asd asd asdas dqedqwd qsdsadasd asdsad
-        .ball
-          .message Ett kortare
-        .ball
-          .message En mellanlång rackare! Ytterst sällsynt med dessa mellanlånga
-        .ball
-          .message O dra mig baklänges på en cykel, detta var mig ett riktigt långt och oläsbart meddlenade! Fyskäms den som skrev detta bedrövliga meddelande!!
+        - each ball in balls
+          .ball
+            .message #{ball.message}
 
     row
     hr

@@ -1,6 +1,7 @@
 body {
   padding: 70px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  height: 100%;
 }
 a {
   color: #00B7FF;
@@ -120,4 +121,94 @@ a {
 #ball-workshop .form-group button {
   margin-top: 5px;
   margin-right: 10px;
+}
+#chat-container {
+  width: 315px;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 9999;
+}
+#chat-container #idle-chats {
+  float: left;
+  width: 45px;
+  height: 100%;
+  padding-top: 50px;
+}
+#chat-container #idle-chats .idle-chat {
+  width: 70px;
+  text-align: center;
+  padding: 3px 0;
+  height: 20px;
+  background: #eee;
+  border-top-left-radius: 3px ;
+  border-top-right-radius: 3px ;
+  float: left;
+  cursor: pointer;
+  margin-bottom: 70px;
+}
+#chat-container #idle-chats .idle-chat:not(.active) {
+  background: #222;
+  color: #eee;
+}
+#chat-container #chats {
+  height: 100%;
+}
+#chat-container #chats .chat {
+  width: 270px;
+  border-left: 1px solid #eee;
+  background: #eee;
+  border-radius: 6px;
+  float: left;
+  height: 100%;
+  position: relative;
+}
+#chat-container #chats .chat .chat-head {
+  text-align: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+#chat-container #chats .chat .message-container {
+  width: 98%;
+  margin: auto;
+  position: absolute;
+  overflow-y: scroll;
+  height: 800px;
+}
+#chat-container #chats .chat .message-container .message {
+  float: left;
+  width: 100%;
+}
+#chat-container #chats .chat .message-container .message .user {
+  padding: 2px 5px 2px 0;
+}
+#chat-container #chats .chat .chat-input-container {
+  position: absolute;
+  bottom: 10px;
+  width: 98%;
+  margin: 0 3px;
+  height: 100px;
+}
+#chat-container #chats .chat .chat-input-container .chat-input {
+  margin-bottom: 6px;
+}
+#chat-container #chats .chat .chat-input-container .chat-post {
+  width: 100%;
+}
+.rotate {
+  /* Safari */
+
+  -webkit-transform: rotate(-90deg);
+  /* Firefox */
+
+  -moz-transform: rotate(-90deg);
+  /* IE */
+
+  -ms-transform: rotate(-90deg);
+  /* Opera */
+
+  -o-transform: rotate(-90deg);
+  /* Internet Explorer */
+
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 }

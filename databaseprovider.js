@@ -42,7 +42,8 @@ Database.prototype.user_exists = function(query, callback){
         if( error ) callback(error)
         else {
             user_collection.find(query).toArray(function(error, result) {
-                if( error ) callback(error)
+                if( error) callback(error)
+                else if (result[0] == undefined) callback('User not found')
                 else callback(null, result[0]) //returns first user
             });
         }
@@ -92,11 +93,10 @@ Database.prototype.removeFriendUser = function(user_email,friend_id, callback) {
     });
 };
 
-Database.prototype.getBallsByuser = function(user_id, callback){
+Database.prototype.getBallsByUser = function(user_id, callback){
     this.getBallsCollection(function(error, ball_collection) {
         if( error ) callback(error)
         else {
-            console.log(user_id);
             ball_collection.find(
                 {$or:[
                     {receiver: user_id},
@@ -109,7 +109,7 @@ Database.prototype.getBallsByuser = function(user_id, callback){
                             else callback(null, results)
                         });
                     });
-                })
+                });
         }
     });
 };
@@ -132,7 +132,7 @@ Database.prototype.searchUsers = function(search_term, callback){
     this.getUsersCollection(function(error, user_collection) {
         if( error ) callback(error)
         else {
-            var search_regex = new RegExp(search_term, 'i');
+            var search_regex = new RegExp(search_term, 'i'); // 'i' to make it case insensitive
             user_collection.find({name: search_regex}).toArray(function(error, result){
                 console.log(result);
                 if( error ) callback(error)
@@ -142,7 +142,7 @@ Database.prototype.searchUsers = function(search_term, callback){
     });
 };
 
-Database.prototype.add_ball= function(ball, callback){
+Database.prototype.add_ball = function(ball, callback){
     this.getBallsCollection(function(error, ball_collection){
         if ( error ) callback(error)
         else {
@@ -150,6 +150,29 @@ Database.prototype.add_ball= function(ball, callback){
             callback(null, ball);
         }
     });
+};
+
+Database.prototype.get_wall_balls = function(friends_id, callback){
+    this.getBallsCollection(function(error, balls_collection){
+        if (error) callback(error);
+        else{
+            friends_id.forEach(function(friend, index) {friends_id[index] = new BSON.ObjectID(friend);})
+            balls_collection.find(
+                {$or: [
+                    {receiver: {$in: friends_id}},
+                    {created_by: {$in: friends_id}}
+                ]},
+                function(err, unsorted_balls){
+                    unsorted_balls.sort({created_at: -1},function(err, balls){
+                        balls.toArray(function(error, results) {
+                            if( error ) callback(error)
+                            else callback(null, results)
+                        });
+                    });
+                });
+        }
+
+    })
 };
 
 exports.Database = Database;

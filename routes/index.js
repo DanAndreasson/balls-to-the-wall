@@ -11,11 +11,15 @@ exports.index = function(req, res){
               title: 'Balls to the Wall'
           });
     }else{ //User is logged in
-        res.render('home',
-            {
-                title: req.session.user.name+"'s Wall of Balls",
-                user: req.session.user
-            });
+        database.get_wall_balls(req.session.user.friends, function(err, balls){
+            res.render('home',
+                {
+                    title: req.session.user.name+"'s Wall of Balls",
+                    user: req.session.user,
+                    balls: balls
+                });
+        });
     }
 };
+
 

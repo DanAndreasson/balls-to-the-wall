@@ -27,6 +27,7 @@ var search = function(){
             for (var i=0; i<data.length; ++i){
                 var result = $('#search-result-template').clone().removeAttr('id').show();
                 result.find('.search-user-link').text(data[i].name).attr('href', '/user/' + data[i]._id);
+                result.find('.start-chat').attr('data-id', data[i]._id);
                 $('#search-cleaner').append(result);
             }
             $('#search-results').slideDown();
