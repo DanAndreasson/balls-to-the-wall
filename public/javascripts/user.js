@@ -3,7 +3,7 @@ $(function() {
         $.ajax({
             url: '/befriend/',
             type: 'PUT',
-            data: {id: $('#user-data').data('id')},
+            data: {id: $('#profileuser-data').data('id')},
             success: function(result) {
                 location.reload();
             },
@@ -17,7 +17,7 @@ $(function() {
         $.ajax({
             url: '/unfriend/',
             type: 'DELETE',
-            data: {id: $('#user-data').data('id')},
+            data: {id: $('#profileuser-data').data('id')},
             success: function(result) {
                 location.reload();
             },

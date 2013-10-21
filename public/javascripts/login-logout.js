@@ -27,7 +27,7 @@ $(function() {
             $('#register-error-password').slideDown().fadeIn();
         console.log($(this).serialize());
         $.post('/register',$(this).serialize(),function(){
-            location.reload();
+            //location.reload();
         }).fail(function(data){
                 if (data.status == 400){
                     $('#login-error-400').slideDown().fadeIn();

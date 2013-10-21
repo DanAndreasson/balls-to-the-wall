@@ -152,7 +152,7 @@ Database.prototype.add_ball = function(ball, callback){
     });
 };
 
-Database.prototype.get_wall_balls = function(friends_id, callback){
+Database.prototype.get_wall_balls = function(friends_id, user_id, callback){
     this.getBallsCollection(function(error, balls_collection){
         if (error) callback(error);
         else{
@@ -160,7 +160,8 @@ Database.prototype.get_wall_balls = function(friends_id, callback){
             balls_collection.find(
                 {$or: [
                     {receiver: {$in: friends_id}},
-                    {created_by: {$in: friends_id}}
+                    {created_by: {$in: [friends_id, user_id]}}
+
                 ]},
                 function(err, unsorted_balls){
                     unsorted_balls.sort({created_at: -1},function(err, balls){

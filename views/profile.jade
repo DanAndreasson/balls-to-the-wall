@@ -10,7 +10,7 @@ block content
 
   .container
     .jumbotron
-      #user-data(style="display: none;", data-id="#{id}")
+      #profileuser-data(style="display: none;", data-id="#{id}", data-name="#{user_profile.name}")
       h1 #{user_profile.name}
       p This dude or dudette is a mean motherfucker
       #profile-buttons
@@ -34,7 +34,7 @@ block content
         #balls
           - each ball in balls
             .ball
-              .message #{ball.message}
+              .message !{ball.message}
 
 
     row

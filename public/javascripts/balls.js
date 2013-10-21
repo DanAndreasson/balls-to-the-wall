@@ -17,6 +17,8 @@ $(function() {
     $('#ball-ready').on('click', function(){
         var input_message = $('#message-input').val();
         var input_length = input_message.length;
+        var receiver = $('#profileuser-data').data('name')
+        var sender = $('#user-data').data('name')
         if (input_length < MIN_CHAR){
             $('#input-error').text("Message is to short. At least " + MIN_CHAR + " chars. You're missing " + (MIN_CHAR-input_length) + " chars").fadeIn();
             console.log("Message is to short. At least " + MIN_CHAR + " chars. You're missing " + (MIN_CHAR-input_length) + " chars");
@@ -25,8 +27,13 @@ $(function() {
             $('#input-error').text("Message is to long. Max " + MAX_CHAR + " chars. You got " + (input_length-MAX_CHAR) + " chars to many").fadeIn();
 
         }else{
-            var receiver_id = $('#user-data').data('id') || 0;
-            console.log(receiver_id);
+            var receiver_id = $('#profileuser-data').data('id') || 0;
+            console.log("receiver id" + receiver_id);
+            if(receiver)
+                input_message = '<span class="ball-receiver"><span>To: </span>'+receiver+"</span>\n" +input_message + '\n <span class="ball-sender"><span>From: </span>'+sender+'</span>'
+            else
+                input_message = input_message + '\n <span class="ball-sender"><span>From: </span>'+sender+'</span>'
+
             $.post('/ball/add_to_user',
                 {
                     receiver_id: receiver_id,
@@ -47,8 +54,9 @@ var fix_size = function(ball){
 
 };
 var add_ball = function(message){
+
     var new_ball = $(document.createElement('div')).addClass('ball').css('display', 'none')
-        .append($(document.createElement('div')).addClass('message').text(message));
+        .append($(document.createElement('div')).addClass('message').html(message));
     $('#balls').prepend(new_ball);
     new_ball.fadeIn('slow');
     fix_size(new_ball);

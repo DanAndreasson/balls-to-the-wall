@@ -151,7 +151,7 @@ exports.register = function(req, res){
     var user_data = {};
     user_data.email = req.body.email;
     database.user_exists({email: user_data.email}, function(err, user){
-        if ( !err){
+        if ( err == 'User not found' || !err){
             if (!user){
                 user_data.name = req.body.name;
                 var salt = bcrypt.genSaltSync(10);
@@ -165,6 +165,7 @@ exports.register = function(req, res){
                 res.send('User with that email already registered', 400);
             }
         }else{
+            console.log(err);
             res.send('Something went wrong', 500);
         }
     });

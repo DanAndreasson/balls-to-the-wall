@@ -13,9 +13,9 @@ a {
   .ball {
     float: left;
     margin-right: 5px;
-    width: 50px;
+    width: 100px;
     text-align: center;
-    border-radius: 300px;
+    border-radius: 50%;
     vertical-align:middle;
     display:table;
     padding: 8px;
@@ -26,6 +26,26 @@ a {
       vertical-align:middle;
       border-radius: 50%;
       text-align: center;
+      word-break:break-all;
+      -moz-hyphens: auto;
+      -ms-hyphens: auto;
+      hyphens: auto;
+      padding: 5px;
+      span{
+        font-size: 10pt;
+        word-break:keep-all;
+
+      }
+      .ball-receiver, .ball-sender{
+        font-size: 12pt;
+        display: block;
+        font-style: italic;
+        word-break:keep-all;
+        -moz-hyphens: none;
+        -ms-hyphens: none;
+        hyphens: none;
+        padding: 0 5px;
+      }
     }
   }
 }
@@ -145,6 +165,7 @@ a {
   right: 0;
   top: 0;
   z-index: 9999;
+
   #idle-chats{
     float: left;
     width: 45px;
@@ -152,6 +173,7 @@ a {
     padding-top: 50px;
     .idle-chat {
       width: 70px;
+      overflow: hidden;
       text-align: center;
       padding: 3px 0;
       height: 20px;
@@ -161,6 +183,7 @@ a {
       float: left;
       cursor: pointer;
       margin-bottom: 70px;
+      z-index: 200;
       &:not(.active){
         background: #222;
         color: #eee;
@@ -177,9 +200,27 @@ a {
       float: left;
       height: 100%;
       position: relative;
+      box-shadow: 0px 0px 5px rgba(0,0,0,0.5);
+      z-index: 150;
       .chat-head{
         text-align: center;
         border-bottom: 1px solid rgba(0,0,0,0.1);
+      }
+      .activefriends{
+        width: 100%;
+        min-height: 60px;
+        display: none;
+        box-shadow: 0px 0px 5px rgba(0,0,0,0.5);
+        border-radius: 6px;
+        padding: 5px;
+        .activefriend{
+          float:left;
+          width: 50%;
+          cursor: pointer;
+        }
+      }
+      .invitebutton{
+        width: 100%;
       }
       .message-container{
         width: 98%;

@@ -9,9 +9,9 @@ a {
 #balls .ball {
   float: left;
   margin-right: 5px;
-  width: 50px;
+  width: 100px;
   text-align: center;
-  border-radius: 300px;
+  border-radius: 50%;
   vertical-align: middle;
   display: table;
   padding: 8px;
@@ -23,6 +23,26 @@ a {
   vertical-align: middle;
   border-radius: 50%;
   text-align: center;
+  word-break: break-all;
+  -moz-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
+  padding: 5px;
+}
+#balls .ball .message span {
+  font-size: 10pt;
+  word-break: keep-all;
+}
+#balls .ball .message .ball-receiver,
+#balls .ball .message .ball-sender {
+  font-size: 12pt;
+  display: block;
+  font-style: italic;
+  word-break: keep-all;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+  padding: 0 5px;
 }
 #logout {
   margin-top: 8px;
@@ -138,6 +158,7 @@ a {
 }
 #chat-container #idle-chats .idle-chat {
   width: 70px;
+  overflow: hidden;
   text-align: center;
   padding: 3px 0;
   height: 20px;
@@ -147,6 +168,7 @@ a {
   float: left;
   cursor: pointer;
   margin-bottom: 70px;
+  z-index: 200;
 }
 #chat-container #idle-chats .idle-chat:not(.active) {
   background: #222;
@@ -163,10 +185,28 @@ a {
   float: left;
   height: 100%;
   position: relative;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+  z-index: 150;
 }
 #chat-container #chats .chat .chat-head {
   text-align: center;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+#chat-container #chats .chat .activefriends {
+  width: 100%;
+  min-height: 60px;
+  display: none;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+  border-radius: 6px;
+  padding: 5px;
+}
+#chat-container #chats .chat .activefriends .activefriend {
+  float: left;
+  width: 50%;
+  cursor: pointer;
+}
+#chat-container #chats .chat .invitebutton {
+  width: 100%;
 }
 #chat-container #chats .chat .message-container {
   width: 98%;

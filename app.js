@@ -55,6 +55,7 @@ app.get('/friends', user.friends);
 app.post('/register', user.register);
 app.get('/search', user.search);
 app.post('/ball/add_to_user', user.add_ball_to_user);
+app.get('/connected_users', routes.connected_users)
 
 
 var httpServer = server.createServer(app).listen(app.get('port'), function(){
@@ -63,7 +64,7 @@ var httpServer = server.createServer(app).listen(app.get('port'), function(){
 
 var io = require('socket.io').listen(httpServer);
 
-var connected_users = {};
+connected_users = {};
 var chat = io.of('/chat')
     .on('connection', function (socket) {
         socket.on('join_chat', function (user_id) {
@@ -118,6 +119,25 @@ var chat = io.of('/chat')
             connected_users[with_id].socket.emit('message', message);
             message.room_name = connected_users[with_id].user.name;
             connected_users[user_id].socket.emit('message', message);
+        });
+        socket.on('invite_chatroom', function (data) {
+            var room_name = data.room_name;
+            var invited_user = data.invited_user_id;
+            console.log(data);
+            connected_users[invited_user].socket.join(room_name);
+            connected_users[invited_user].rooms.push(room_name);
+            var message = {
+                'message': 'WELCOME TO '+room_name,
+                'room': room_name,
+                'sender': {
+                    'name': connected_users[invited_user].name,
+                    'id': connected_users[invited_user].id
+                },
+                'room_name': connected_users[invited_user].user.name
+            };
+            connected_users[invited_user].socket.emit('message', message);
+            message.message = connected_users[invited_user].user.name + " has joined the room!";
+            connected_users[invited_user].socket.broadcast.to(room_name).emit('message', message);
         });
 
 

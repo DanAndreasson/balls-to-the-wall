@@ -25,7 +25,7 @@ html(lang='en')
 
   body
     if user
-      #user-data(data-id="#{user.id}", style="display: none;")
+      #user-data(data-id="#{user.id}",data-name="#{user.name}", style="display: none;")
     .navbar.navbar-fixed-top.navbar-inverse(role='navigation')
       .container
         .navbar-header
@@ -79,6 +79,11 @@ html(lang='en')
       #chat-template
         .chat(data-with="" data-id="" style="display: none;")
           h1.chat-head
+          button.invitebutton.btn.btn-success(type="button") Invite
+          .activefriends
+            //a.activefriend Dan Andreasson
+            //a.activefriend Martin Lidh
+            //a.activefriend Daniel Morja
           .message-container
           .chat-input-container
             textarea.form-control.chat-input

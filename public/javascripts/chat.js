@@ -32,6 +32,49 @@ $(function() {
         $(this).parent().find('.chat-input').val('');
     });
 
+    $('#chats').on('click', '.invitebutton', function(e){
+            e.preventDefault();
+            if ($(".activefriends").css('display') == 'none'){
+                $.ajax({
+                    url: '/connected_users',
+                    type: 'GET',
+                    success: function(data){
+                        $.each(data, function(index, con_user){
+                            $(document.)
+                            var activefriend = $(document.createElement('a')).addClass('activefriend').attr("data-id", con_user.id).text(con_user.name);
+                            $('.activefriends').prepend(activefriend);
+                        });
+                    }
+                });
+
+                $(".activefriends").toggle();
+                $(this)
+                    .addClass('btn-danger')
+                    .removeClass('btn-success')
+                    .text('Close');
+
+            }else{
+                $(".activefriends").toggle();
+                $(this)
+                    .addClass('btn-success')
+                    .removeClass('btn-danger')
+                    .text('Invite');
+            }
+        }
+    );
+    $('#chats').on('click', '.activefriend', function(e){
+        e.preventDefault();
+        chat.emit('invite_chatroom',
+            {
+                'invited_user_id':$(this).data('id'),
+                'room_name': $(this).parent().parent().data('id')
+            });
+
+
+
+
+
+    });
     $('#search-results').on('click', '.start-chat', function(){
         var chat_with = $(this).data('id');
         chat.emit('create_chatroom', {'user_id': user_id, 'with_id': chat_with});
