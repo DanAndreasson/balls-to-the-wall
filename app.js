@@ -55,14 +55,13 @@ app.get('/friends', user.friends);
 app.post('/register', user.register);
 app.get('/search', user.search);
 app.post('/ball/add_to_user', user.add_ball_to_user);
-app.get('/connected_users', routes.connected_users)
 
 
 var httpServer = server.createServer(app).listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));
 });
 
-var io = require('socket.io').listen(httpServer);
+var io = require('socket.io').listen(httpServer, { log: false });
 
 connected_users = {};
 var chat = io.of('/chat')
@@ -70,20 +69,20 @@ var chat = io.of('/chat')
         socket.on('join_chat', function (user_id) {
 
             if (user_id in connected_users) {
-                user = connected_users[user_id];
-                user.socket = socket;
-                for (var i = 0; i < user.rooms.length; ++i){
-                    var room  = user.rooms[i];
-                    user.socket.join(room);
+                connected_users[user_id].socket = socket;
+                for (var i = 0; i < connected_users[user_id].rooms.length; ++i){
+                    var room  = connected_users[user_id].rooms[i];
+                    connected_users[user_id].socket.join(room);
                     var message = {
-                        'message': user.user.name+' Has reconnected to the chat',
+                        'message': connected_users[user_id].user.name+' Has reconnected to the chat',
+                        'update': true,
                         'room': room,
                         'sender': {
                             'name': '',
                             'id': ''
                         }
                     };
-                    user.socket.broadcast.to(room).emit('message', message);
+                    emit_message(message, user_id, room, true);
                 }
                 chat.emit('update_connected');
             }else{
@@ -116,14 +115,13 @@ var chat = io.of('/chat')
                 },
                 'room_name': connected_users[user_id].user.name
             };
-            connected_users[with_id].socket.emit('message', message);
+            emit_message(message, with_id);
             message.room_name = connected_users[with_id].user.name;
-            connected_users[user_id].socket.emit('message', message);
+            emit_message(message, user_id);
         });
         socket.on('invite_chatroom', function (data) {
             var room_name = data.room_name;
             var invited_user = data.invited_user_id;
-            console.log(data);
             connected_users[invited_user].socket.join(room_name);
             connected_users[invited_user].rooms.push(room_name);
             var message = {
@@ -135,17 +133,16 @@ var chat = io.of('/chat')
                 },
                 'room_name': connected_users[invited_user].user.name
             };
-            connected_users[invited_user].socket.emit('message', message);
+            emit_message(message, invited_user);
             message.message = connected_users[invited_user].user.name + " has joined the room!";
-            connected_users[invited_user].socket.broadcast.to(room_name).emit('message', message);
+            message.update = true;
+            emit_message(message, invited_user, room_name, true);
         });
 
 
         socket.on('send_message', function (data) {
-            console.log(socket);
-
             var sender = connected_users[data.user_id].user;
-            var response = {
+            var message = {
                 'message': data.message,
                 'room': data.room,
                 'sender': {
@@ -153,10 +150,82 @@ var chat = io.of('/chat')
                     'id': sender.id
                 }
             };
-            socket.broadcast.to(data.room).emit('message', response);
-            socket.emit('message', response);
+            emit_message(message, sender.id, data.room, true);
+            emit_message(message, sender.id);
+        });
+
+        socket.on('update_chatroom_users', function(data){
+            update_room_users(data.room, data.asker)
+        });
+
+        socket.on('get_inviteable_users', function(data){
+            var room = data.room;
+            var who_asked = data.user_id;
+
+            var inviteable_users= [];
+            for (var id in connected_users){
+                if(who_asked != id)
+                    inviteable_users.push(connected_users[id].user);
+            }
+            connected_users[who_asked].socket.emit('inviteable_users',
+                {
+                    'room': room,
+                    'users': inviteable_users
+                });
         });
 
     });
+
+var emit_message = function(message, sender_id, room, broadcast){
+    broadcast = typeof broadcast !== 'undefined' ? broadcast : false; //Default value of broadcast to false
+
+    if (broadcast){
+        connected_users[sender_id].socket.broadcast.to(room).emit('message', message);
+    }else{
+        connected_users[sender_id].socket.emit('message', message);
+    }
+};
+
+var update_room_users = function(room, who_asked){
+    var users_in_room = [];
+    for (var id in connected_users){
+        if (id == who_asked) continue;
+        console.log(id,connected_users[id].socket.manager.rooms,'\n');
+        if('/chat/'+room in io.sockets.manager.roomClients[connected_users[id].socket.id])
+            users_in_room.push(connected_users[id].user);
+    }
+    connected_users[who_asked].socket.emit('update_chatroom_users',
+        {
+            'users':users_in_room,
+            'room' :room
+        });
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

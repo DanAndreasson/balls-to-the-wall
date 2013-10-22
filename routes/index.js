@@ -21,16 +21,6 @@ exports.index = function(req, res){
         });
     }
 };
-exports.connected_users = function(req,res){
-    var return_connected_users= [];
-    for (var index in connected_users)
-    {
-        if(req.session.user.id != connected_users[index].user.id)
-            return_connected_users.push(connected_users[index].user);
-    }
-    res.send(return_connected_users);
 
-
-};
 
 

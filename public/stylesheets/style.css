@@ -188,25 +188,48 @@ a {
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
   z-index: 150;
 }
-#chat-container #chats .chat .chat-head {
+#chat-container #chats .chat .close {
+  margin: 0 4px 0;
+}
+#chat-container #chats .chat h4 {
   text-align: center;
+  padding: 0;
+  margin: 0;
+}
+#chat-container #chats .chat .chat-head {
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-bottom: 2px;
+}
+#chat-container #chats .chat .chat-head h2 {
+  text-align: center;
 }
 #chat-container #chats .chat .activefriends {
-  width: 100%;
+  width: 97%;
   min-height: 60px;
   display: none;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
   border-radius: 6px;
   padding: 5px;
+  margin: 3px auto;
+  overflow: hidden;
 }
 #chat-container #chats .chat .activefriends .activefriend {
   float: left;
   width: 50%;
   cursor: pointer;
 }
+#chat-container #chats .chat .users-room-container {
+  padding: 5px;
+}
+#chat-container #chats .chat .users-room-container .user-in-room {
+  float: left;
+  width: 50%;
+  cursor: pointer;
+}
 #chat-container #chats .chat .invitebutton {
   width: 100%;
+  margin-bottom: 3px;
 }
 #chat-container #chats .chat .message-container {
   width: 98%;

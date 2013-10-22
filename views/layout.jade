@@ -69,21 +69,16 @@ html(lang='en')
     if (user)
       #chat-container
         #idle-chats
-          //.idle-chat.rotate.active(data-with="martin")
-            | Martin
-          //.idle-chat.rotate(data-with="Morja")
-            | Morja
         #chats
 
 
       #chat-template
         .chat(data-with="" data-id="" style="display: none;")
-          h1.chat-head
+          button(type="button" class="close" aria-hidden="true") &times
+          h4 Users in chat
+          .chat-head
           button.invitebutton.btn.btn-success(type="button") Invite
           .activefriends
-            //a.activefriend Dan Andreasson
-            //a.activefriend Martin Lidh
-            //a.activefriend Daniel Morja
           .message-container
           .chat-input-container
             textarea.form-control.chat-input
