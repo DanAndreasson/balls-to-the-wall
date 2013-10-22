@@ -15,17 +15,24 @@ $(function() {
     });
 
     chat.on('message', function (data) {
-        var room = data.room;
-        if ($('.chat[data-id="'+room+'"]').length == 0)
-            add_chat(data.room_name, room);
-        if (data.update == true){
-            chat.emit('update_chatroom_users',
-                {
-                    'room':data.room,
-                    'asker': user_id
-                });
+        if (data.ERROR){
+            $('#chat-error').text(data.ERROR).fadeIn();
+            setTimeout(function(){
+                $('#chat-error').slideToggle().fadeOut('slow');
+            }, 3000);
+        }else{
+            var room = data.room;
+            if ($('.chat[data-id="'+room+'"]').length == 0)
+                add_chat(data.room_name, room);
+            if (data.update == true){
+                chat.emit('update_chatroom_users',
+                    {
+                        'room':data.room,
+                        'asker': user_id
+                    });
+            }
+            add_message({'name': data.sender.name, 'id': data.sender.id}, data.message, room);
         }
-        add_message({'name': data.sender.name, 'id': data.sender.id}, data.message, room);
     });
 
     chat.on('inviteable_users', function(data){
@@ -40,6 +47,8 @@ $(function() {
 
     $('#idle-chats').on('click', '.idle-chat', function(){
         swap_chat($(this).data('id'));
+
+
     });
 
     $('#chats').on('click', '.chat-post', function(e){
@@ -87,6 +96,7 @@ $(function() {
             .addClass('btn-success')
             .removeClass('btn-danger')
             .text('Invite');
+        fix_chat_size();
     });
 
     $('#chats').on('click', '.close', function(){
@@ -99,6 +109,27 @@ $(function() {
 
     });
 
+    $('#chat-toggler').on('click', function(){
+        if (document.getElementById('chats').childNodes.length > 0)
+            $('#chat-container').slideToggle('fast');
+        else{
+            $('#chat-error').text('There is no active chat. View a profile or search for something to start a chat').fadeIn();
+            setTimeout(function(){
+                $('#chat-error').slideToggle().fadeOut('slow');
+            }, 5000);
+        }
+    });
+
+    $('#chat-button').on('click', function(){
+        var chat_with = $('#profileuser-data').data('id');
+        chat.emit('create_chatroom', {'user_id': user_id, 'with_id': chat_with});
+    });
+
+
+
+    $(window).on('resize', function(){
+        fix_chat_size()
+    });
 });
 
 var swap_chat = function(id){
@@ -127,6 +158,7 @@ var add_chat = function(chat_with, id){
             'room':id,
             'asker': user_id
         });
+    fix_chat_size();
 };
 
 var add_message = function(sender, message, chat_id){
@@ -151,4 +183,34 @@ var update_chatroom_users = function(chat_room, connected_users){
         });
     }
 };
+
+var fix_chat_size = function(){
+    var msg_container = $('.active-chat .message-container')
+    if (msg_container.length != 0)
+        msg_container.height($(window).height()-msg_container.position().top-msg_container.next().height()-15);
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

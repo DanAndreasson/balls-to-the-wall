@@ -120,7 +120,6 @@ Database.prototype.getAllFriends = function(friends_id, callback){
         else {
             friends_id.forEach(function(friend, index) {friends_id[index] = new BSON.ObjectID(friend);})
             user_collection.find({_id: {$in: friends_id}}).toArray(function(error, result){
-                console.log(result);
                 if( error ) callback(error)
                 else callback(null, result)
             });
@@ -134,7 +133,6 @@ Database.prototype.searchUsers = function(search_term, callback){
         else {
             var search_regex = new RegExp(search_term, 'i'); // 'i' to make it case insensitive
             user_collection.find({name: search_regex}).toArray(function(error, result){
-                console.log(result);
                 if( error ) callback(error)
                 else callback(null, result)
             });

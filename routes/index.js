@@ -4,7 +4,6 @@
  */
 
 exports.index = function(req, res){
-    console.log(req.session);
     if (req.session.user == undefined){
         res.render('index',
           {

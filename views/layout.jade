@@ -40,7 +40,7 @@ html(lang='en')
               li(js-nav="user")
                 a(href='/user/#{user.id}') My Profile
               li(js-nav="chat")
-                a(href='/chat') Chat
+                a#chat-toggler Chat
 
             .navbar-right
               button.btn.btn-danger#logout(type='button') Log out
@@ -64,6 +64,8 @@ html(lang='en')
               button.btn.btn-success(type='submit') Sign in
               button.btn.btn-primary(type='button') Sign up
               .nav-collapse
+    .container
+      #chat-error.alert.alert-danger(style="display: none;")
     block content
 
     if (user)

@@ -54,7 +54,6 @@ var fix_size = function(ball){
 
 };
 var add_ball = function(message){
-
     var new_ball = $(document.createElement('div')).addClass('ball').css('display', 'none')
         .append($(document.createElement('div')).addClass('message').html(message));
     $('#balls').prepend(new_ball);

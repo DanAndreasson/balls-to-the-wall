@@ -2,9 +2,9 @@ $(function() {
     fixActiveNav();
     $('#login-form').on('submit', function(e){
         e.preventDefault();
-        $.get('/login',$(this).serialize(),function(data, response, id){
+        $.get('/login',$(this).serialize(),function(){
             location.reload();
-        }).fail(function(data, response,status){
+        }).fail(function(data){
                 if (data.status == 400){
                     $('#login-error-400').slideDown().fadeIn();
                 }else if (data.status == 500){
@@ -21,13 +21,10 @@ $(function() {
 
     $('#register-form').on('submit', function(e){
         e.preventDefault();
-
-
         if ($(this).find('input[name="password"]').val() != $(this).find('input[name="password_again"]').val())
             $('#register-error-password').slideDown().fadeIn();
-        console.log($(this).serialize());
         $.post('/register',$(this).serialize(),function(){
-            //location.reload();
+            location.reload();
         }).fail(function(data){
                 if (data.status == 400){
                     $('#login-error-400').slideDown().fadeIn();
@@ -37,11 +34,6 @@ $(function() {
             });
         return false;
     });
-
-    /*$('.nav li').on('click', function(){
-        $('.active').removeClass('active');
-        $(this).addClass('active');
-    });*/
 });
 
 var fixActiveNav = function(){

@@ -34,10 +34,9 @@ exports.profile = function(req, res){
     database.user_exists({_id: oid},function(err, user){
         if (user){
             var friends_or_not = inObject(req.session.user.friends, oid)
-            if (friends_or_not){
+            if (friends_or_not || id == req.session.user.id){
                 database.getBallsByUser(oid, function(err, balls){
                     if (!err){
-                        console.log(balls);
                         res.render('profile',
                             {
                                 title: req.session.user.name+"'s Wall of Balls",
@@ -165,7 +164,6 @@ exports.register = function(req, res){
                 res.send('User with that email already registered', 400);
             }
         }else{
-            console.log(err);
             res.send('Something went wrong', 500);
         }
     });
@@ -198,6 +196,37 @@ exports.search = function(req, res) {
         else
             res.send([]);
     });
+};
+
+
+exports.new_balls = function(req, res){
+    var data = JSON.parse(req.body);
+    var id = new BSON.ObjectID();
+    var wall = req.body.wall;
+    console.log(id,wall, req.body);
+    if (wall){
+        database.getBallsByUser(id, function(error, balls){
+            if (!err){
+                res.send(balls, 200);
+            }else{
+                res.send('Something went wrong!', 500)
+            }
+        });
+    }else{
+        database.user_exists({'_id': id}, function(err, user){
+            if (!err){
+                database.get_wall_balls(user.friends, id, function(error, balls){
+                    if (!err){
+                        res.send(balls, 200);
+                    }else{
+                        res.send('Something went wrong!', 500)
+                    }
+                });
+            }else{
+                res.send('Something went wrong!', 500)
+            }
+        });
+    }
 };
 
 

@@ -55,6 +55,7 @@ app.get('/friends', user.friends);
 app.post('/register', user.register);
 app.get('/search', user.search);
 app.post('/ball/add_to_user', user.add_ball_to_user);
+app.post('/new_balls', user.new_balls);
 
 
 var httpServer = server.createServer(app).listen(app.get('port'), function(){
@@ -102,22 +103,26 @@ var chat = io.of('/chat')
             var room_name = 'room #' + Object.keys(io.sockets.manager.rooms).length;
             var user_id = data.user_id;
             var with_id = data.with_id;
-            connected_users[user_id].socket.join(room_name);
-            connected_users[user_id].rooms.push(room_name);
-            connected_users[with_id].socket.join(room_name);
-            connected_users[with_id].rooms.push(room_name);
-            var message = {
-                'message': 'WELCOME TO '+room_name,
-                'room': room_name,
-                'sender': {
-                    'name': connected_users[user_id].name,
-                    'id': connected_users[user_id].id
-                },
-                'room_name': connected_users[user_id].user.name
-            };
-            emit_message(message, with_id);
-            message.room_name = connected_users[with_id].user.name;
-            emit_message(message, user_id);
+            if (!(with_id in connected_users)){
+                emit_message({'ERROR': 'User is not connected.'}, user_id);
+            }else {
+                connected_users[user_id].socket.join(room_name);
+                connected_users[user_id].rooms.push(room_name);
+                connected_users[with_id].socket.join(room_name);
+                connected_users[with_id].rooms.push(room_name);
+                var message = {
+                    'message': 'WELCOME TO '+room_name,
+                    'room': room_name,
+                    'sender': {
+                        'name': connected_users[user_id].name,
+                        'id': connected_users[user_id].id
+                    },
+                    'room_name': connected_users[user_id].user.name
+                };
+                emit_message(message, with_id);
+                message.room_name = connected_users[with_id].user.name;
+                emit_message(message, user_id);
+            }
         });
         socket.on('invite_chatroom', function (data) {
             var room_name = data.room_name;
@@ -163,8 +168,9 @@ var chat = io.of('/chat')
             var who_asked = data.user_id;
 
             var inviteable_users= [];
+
             for (var id in connected_users){
-                if(who_asked != id)
+                if(who_asked != id && !('/chat/'+room in io.sockets.manager.roomClients[connected_users[id].socket.id]))
                     inviteable_users.push(connected_users[id].user);
             }
             connected_users[who_asked].socket.emit('inviteable_users',
@@ -173,12 +179,10 @@ var chat = io.of('/chat')
                     'users': inviteable_users
                 });
         });
-
     });
 
 var emit_message = function(message, sender_id, room, broadcast){
     broadcast = typeof broadcast !== 'undefined' ? broadcast : false; //Default value of broadcast to false
-
     if (broadcast){
         connected_users[sender_id].socket.broadcast.to(room).emit('message', message);
     }else{
@@ -190,7 +194,6 @@ var update_room_users = function(room, who_asked){
     var users_in_room = [];
     for (var id in connected_users){
         if (id == who_asked) continue;
-        console.log(id,connected_users[id].socket.manager.rooms,'\n');
         if('/chat/'+room in io.sockets.manager.roomClients[connected_users[id].socket.id])
             users_in_room.push(connected_users[id].user);
     }

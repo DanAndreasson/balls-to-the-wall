@@ -18,11 +18,11 @@ block content
           if friends
             button.btn.btn-danger#unfriend(type='button') Unfriend
             button.btn.btn-primary#drop-a-ball(type='button') Drop a Ball
-            button.btn.btn-primary#chat(type='button') Chattering
+            button.btn.btn-primary#chat-button(type='button') Chat
           else
             button.btn.btn-success#befriend(type='button') Befriend
         else
-          button.btn.btn-success#edit-profile(type='button') Edit profile
+          button.btn.btn-success#edit-profile(type='button' disabled="disabled") Edit profile
     .container#ball-workshop
      .form-group
         label(for='message-input') Declare war, express your feelings or say what you have to say. No Bieber-talk whatsoever.
@@ -45,5 +45,12 @@ block content
   script(src='/javascripts/user.js')
 
   script(src='/bootstrap/js/bootstrap.min.js')
+  script(type='text/javascript').
+    var worker = new Worker('/javascripts/ballWorker.js');
+
+    worker.addEventListener('message', function(e) {
+      console.log(e);
+    }, false);
+    worker.postMessage({'cmd': 'profile', 'msg': 'Hi'});
 
 
