@@ -41,8 +41,10 @@ app.use(function(req,res){
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
-
-database= new Database('localhost', 27017);
+var mongoUri = process.env.MONGOLAB_URI ||
+    process.env.MONGOHQ_URL ||
+    'mongodb://localhost/balls-to-the-wall';
+database= new Database('mongoUri', 27017);
 
 app.get('/', routes.index);
 app.put('/befriend/', user.befriend);
