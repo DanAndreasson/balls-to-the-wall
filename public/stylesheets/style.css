@@ -9,6 +9,9 @@ a {
 #chat-toggler {
   cursor: pointer;
 }
+#balls {
+  display: none;
+}
 #balls .ball {
   float: left;
   margin-right: 5px;
