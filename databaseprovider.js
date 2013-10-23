@@ -157,7 +157,7 @@ Database.prototype.get_wall_balls = function(friends_id, user_id, callback){
             friends_id.forEach(function(friend, index) {friends_id[index] = new BSON.ObjectID(friend);})
             balls_collection.find(
                 {$or: [
-                    {receiver: {$in: friends_id}},
+                    {receiver: {$in: [friends_id, user_id]}},
                     {created_by: {$in: [friends_id, user_id]}}
 
                 ]},
