@@ -22,7 +22,10 @@ $(function() {
     $('#register-form').on('submit', function(e){
         e.preventDefault();
         if ($(this).find('input[name="password"]').val() != $(this).find('input[name="password_again"]').val())
+        {
             $('#register-error-password').slideDown().fadeIn();
+            return;
+        }
         $.post('/register',$(this).serialize(),function(){
             location.reload();
         }).fail(function(data){

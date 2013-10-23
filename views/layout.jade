@@ -34,11 +34,11 @@ html(lang='en')
           if user
             ul.nav.navbar-nav
               li(js-nav="")
-                a(href='/') Wall
+                a#wall-button(href='/') Wall
               li(js-nav="friends")
-                a(href='/friends') Friends
+                a#friends-button(href='/friends') Friends
               li(js-nav="user")
-                a(href='/user/#{user.id}') My Profile
+                a#myprofile-button(href='/user/#{user.id}') My Profile
               li(js-nav="chat")
                 a#chat-toggler Chat
 
@@ -61,8 +61,7 @@ html(lang='en')
                 input.form-control(name="email", type='text', placeholder='Email@Liu.se')
               .form-group
                 input.form-control(name="password", type='password', placeholder='Password')
-              button.btn.btn-success(type='submit') Sign in
-              button.btn.btn-primary(type='button') Sign up
+              button.btn.btn-success(type='submit' name = 'sign_in') Sign in
               .nav-collapse
     .container
       #chat-error.alert.alert-danger(style="display: none;")

@@ -12,21 +12,21 @@ block content
 
     form.form-horizontal(role='form')#register-form
       .form-group
-        label.col-lg-2.control-label(for='Name') Name
+        label.col-lg-2.control-label(for='Name' required='required') Name
         .col-lg-6
-          input.form-control(name="name", type='text', placeholder='Dan Andreasson')
+          input.form-control(name="name", type='text', placeholder='Dan Andreasson' required='required')
       .form-group
-        label.col-lg-2.control-label(for='Email') Email
+        label.col-lg-2.control-label(for='Email' required='required') Email
         .col-lg-6
-          input.form-control(name="email", type='email', placeholder='Email@liu.se')
+          input.form-control(name="email", type='email', placeholder='Email@liu.se' required='required')
       .form-group
         label.col-lg-2.control-label(for='Password') Password
         .col-lg-6
-          input.form-control(name="password", type='password', placeholder='Password')
+          input.form-control(name="password", type='password', placeholder='Password' required='required')
       .form-group
         label.col-lg-2.control-label(for='PasswordAgain') Password again
         .col-lg-6
-          input.form-control(name="password_again", type='password', placeholder='Password')
+          input.form-control(name="password_again", type='password', placeholder='Password' required='required')
       .form-group
         .col-lg-offset-2.col-lg-6
           button.btn.btn-default(type='submit') Sign me up!

@@ -30,12 +30,13 @@ var search = function(){
                 result.find('.start-chat').attr('data-id', data[i]._id);
                 $('#search-cleaner').append(result);
             }
-            $('#search-results').slideDown();
         }else{
-            var result = $('#search-result-template').clone().removeAttr('id').show();
+            var result = $('#search-result-template').clone().removeAttr('id');
             result.find('.search-user-link').text('No result!').attr('href', '/user/#Nothing_here-FOOL');
             $('#search-cleaner').append(result);
+
         }
+        $('#search-results').slideDown();
 
 
     } );
