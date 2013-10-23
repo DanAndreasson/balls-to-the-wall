@@ -65,6 +65,7 @@ var httpServer = server.createServer(app).listen(app.get('port'), function(){
 var io = require('socket.io').listen(httpServer, { log: false });
 
 connected_users = {};
+
 var chat = io.of('/chat')
     .on('connection', function (socket) {
         socket.on('join_chat', function (user_id) {

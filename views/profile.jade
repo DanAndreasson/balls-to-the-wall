@@ -46,11 +46,16 @@ block content
 
   script(src='/bootstrap/js/bootstrap.min.js')
   script(type='text/javascript').
+    latest_ball = "#{balls[0].created_at.toISOString()}";
     var worker = new Worker('/javascripts/ballWorker.js');
 
     worker.addEventListener('message', function(e) {
-      console.log(e);
+       on_new_ball(e.data);
     }, false);
-    worker.postMessage({'cmd': 'profile', 'msg': 'Hi'});
+    worker.postMessage({'cmd': 'get_new_balls',
+       'latest': latest_ball,
+       'wall':false,
+       'id': $('#profileuser-data').data('id')
+    });
 
 

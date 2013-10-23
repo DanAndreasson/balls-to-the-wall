@@ -25,7 +25,18 @@ block content
     footer
       p © Balls to the Wall 2013
 
-
+  script(type='text/javascript').
+    latest_ball = "#{balls[0].created_at.toISOString()}";
+    var worker = new Worker('/javascripts/ballWorker.js');
+      worker.addEventListener('message', function(e) {
+        on_new_ball(e.data);
+    }, false);
+    worker.postMessage(
+    {
+      'cmd': 'get_new_balls',
+      'latest': latest_ball,
+      'wall':true
+    });
   script(src='/javascripts/login-logout.js')
   script(src='/bootstrap/js/bootstrap.min.js')
 

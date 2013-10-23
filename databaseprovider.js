@@ -93,16 +93,17 @@ Database.prototype.removeFriendUser = function(user_email,friend_id, callback) {
     });
 };
 
-Database.prototype.getBallsByUser = function(user_id, callback){
+Database.prototype.getBallsByUser = function(user_id, callback, query){
     this.getBallsCollection(function(error, ball_collection) {
         if( error ) callback(error)
         else {
-            ball_collection.find(
-                {$or:[
+            if (query == undefined){
+                query = {$or:[
                     {receiver: user_id},
                     {created_by: user_id}
-                ]},
-                function(err, unsorted_balls){
+                ]};
+            }
+            ball_collection.find(query, function(err, unsorted_balls){
                     unsorted_balls.sort({created_at: -1},function(err, balls){
                         balls.toArray(function(error, results) {
                             if( error ) callback(error)
@@ -118,7 +119,7 @@ Database.prototype.getAllFriends = function(friends_id, callback){
     this.getUsersCollection(function(error, user_collection) {
         if( error ) callback(error)
         else {
-            friends_id.forEach(function(friend, index) {friends_id[index] = new BSON.ObjectID(friend);})
+            friends_id.forEach(function(friend, index) {friends_id[index] = new BSON.ObjectID(friend);});
             user_collection.find({_id: {$in: friends_id}}).toArray(function(error, result){
                 if( error ) callback(error)
                 else callback(null, result)
@@ -150,18 +151,18 @@ Database.prototype.add_ball = function(ball, callback){
     });
 };
 
-Database.prototype.get_wall_balls = function(friends_id, user_id, callback){
+Database.prototype.get_wall_balls = function(friends_id, user_id, callback, query){
     this.getBallsCollection(function(error, balls_collection){
         if (error) callback(error);
         else{
-            friends_id.forEach(function(friend, index) {friends_id[index] = new BSON.ObjectID(friend);})
-            balls_collection.find(
-                {$or: [
+            if (query== undefined){
+                friends_id.forEach(function(friend, index) {friends_id[index] = new BSON.ObjectID(friend);})
+                query = {$or: [
                     {receiver: {$in: [friends_id, user_id]}},
                     {created_by: {$in: [friends_id, user_id]}}
-
-                ]},
-                function(err, unsorted_balls){
+                ]};
+            }
+            balls_collection.find(query ,function(err, unsorted_balls){
                     unsorted_balls.sort({created_at: -1},function(err, balls){
                         balls.toArray(function(error, results) {
                             if( error ) callback(error)

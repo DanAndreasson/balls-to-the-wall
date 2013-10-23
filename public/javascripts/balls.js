@@ -1,7 +1,9 @@
 const MIN_CHAR = 1;
 const MAX_CHAR = 140;
 
+
 $(function() {
+
     $.each($('.ball'), function(index, ball){
         fix_size($(ball));
     });
@@ -41,7 +43,8 @@ $(function() {
                 }
                 , function(data){
                     $('#ball-workshop').slideUp('fast');
-                    add_ball(data.message);
+                    //add_ball(data.message);
+                    //The message will now show up thanks to webworkers!
             });
         }
     });
@@ -53,6 +56,15 @@ var fix_size = function(ball){
     ball.width(size).height(size);
 
 };
+
+var on_new_ball = function(data){
+    console.log('a new ball', data.balls[0]);
+    latest_ball = data.balls[0].created_at;
+    $.each(data.balls, function(index, ball){
+        add_ball(ball.message);
+    });
+};
+
 var add_ball = function(message){
     var new_ball = $(document.createElement('div')).addClass('ball').css('display', 'none')
         .append($(document.createElement('div')).addClass('message').html(message));

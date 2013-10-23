@@ -3,6 +3,7 @@
  * GET users listing.
  */
 
+var new_balls = {};
 
 exports.add_ball_to_user = function(req, res){
     if (!req.session.user){
@@ -142,6 +143,7 @@ exports.login = function(req, res){
 };
 
 exports.logout = function(req, res){
+    delete connected_users[req.session.user.id];
     req.session.destroy();
     res.send('Logout successful', 200);
 };
@@ -200,32 +202,48 @@ exports.search = function(req, res) {
 
 
 exports.new_balls = function(req, res){
-    var data = JSON.parse(req.body);
-    var id = new BSON.ObjectID();
+    var profile_id = new BSON.ObjectID(req.body.id);
+    var user_id = new BSON.ObjectID(req.session.user.id);
+    var latest = new Date(req.body.latest);
     var wall = req.body.wall;
-    console.log(id,wall, req.body);
-    if (wall){
-        database.getBallsByUser(id, function(error, balls){
-            if (!err){
+    var query = {};
+    console.log(latest, profile_id, user_id, wall);
+    if (!wall){
+        query = {
+            $and:
+                [
+                    {$or:[
+                        {receiver: user_id},
+                        {created_by: user_id}
+                    ]},
+                    {created_at: {$gt: latest}}
+                ]};
+        database.getBallsByUser(user_id, function(error, balls){
+            if (!error){
                 res.send(balls, 200);
             }else{
-                res.send('Something went wrong!', 500)
+                res.send('Something went wrong when get users balls', 500)
             }
-        });
+        }, query);
     }else{
-        database.user_exists({'_id': id}, function(err, user){
-            if (!err){
-                database.get_wall_balls(user.friends, id, function(error, balls){
-                    if (!err){
-                        res.send(balls, 200);
-                    }else{
-                        res.send('Something went wrong!', 500)
-                    }
-                });
-            }else{
-                res.send('Something went wrong!', 500)
-            }
-        });
+            var friends_id = req.session.user.friends;
+            friends_id.forEach(function(friend, index) {friends_id[index] = new BSON.ObjectID(friend);});
+            query = {
+                $and:
+                    [
+                        {$or: [
+                            {receiver: {$in: [friends_id, user_id]}},
+                            {created_by: {$in: [friends_id, user_id]}}
+                        ]},
+                        {created_at: {$gt: latest}}
+                    ]};
+            database.get_wall_balls(friends_id, user_id, function(error, balls){
+                if (!error){
+                    res.send(balls, 200);
+                }else{
+                    res.send('Something went wrong! with wall balls', 500)
+                }
+            }, query);
     }
 };
 
