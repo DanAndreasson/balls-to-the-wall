@@ -26,7 +26,7 @@ block content
       p © Balls to the Wall 2013
 
   script(type='text/javascript').
-    latest_ball = "#{balls[0].created_at.toISOString()}";
+    latest_ball = new Date();
     var worker = new Worker('/javascripts/ballWorker.js');
       worker.addEventListener('message', function(e) {
         on_new_ball(e.data);

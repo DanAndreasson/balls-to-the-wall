@@ -46,7 +46,8 @@ block content
 
   script(src='/bootstrap/js/bootstrap.min.js')
   script(type='text/javascript').
-    latest_ball = "#{balls[0].created_at.toISOString()}";
+    latest_ball = new Date();
+
     var worker = new Worker('/javascripts/ballWorker.js');
 
     worker.addEventListener('message', function(e) {
