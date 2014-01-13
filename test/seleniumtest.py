@@ -1,3 +1,5 @@
+
+
 # -*- coding: utf-8 -*-
 from selenium.webdriver.firefox import webdriver
 from selenium.common.exceptions import NoSuchElementException
@@ -5,7 +7,7 @@ from selenium.webdriver.common.keys import Keys
 import time
 
 #User testing
-def user_registration(user_name, email, password, confirm_password):
+def user_registration(user_name, email, password):
     form = browser.find_element_by_id("register-form")
     name_box = form.find_element_by_name("name")
     email_box = form.find_element_by_name("email")
@@ -18,7 +20,7 @@ def user_registration(user_name, email, password, confirm_password):
     name_box.send_keys(user_name)
     email_box.send_keys(email)
     password_box.send_keys(password)
-    confirm_pw_box.send_keys(confirm_password)
+    confirm_pw_box.send_keys(password)
     form.submit()
     time.sleep(1)
 
@@ -89,28 +91,35 @@ def ball_dropping(message, wall=False):
     browser.find_element_by_id("message-input").clear()
     browser.find_element_by_id("message-input").send_keys(message)
     browser.find_element_by_id("ball-ready").click()
+    time.sleep(6)
+    balls=browser.find_elements_by_id("balls")
+    ball_text=balls[0].find_element_by_class_name("ball").find_element_by_class_name("message")
+    assert message in ball_text.text
     time.sleep(1)
 
 
 #testing chat
-def chat(user, password, message, response):
+def chat(partner_email, partner_password, message, response):
     chat_partner = webdriver.WebDriver()
     chat_partner.get("localhost:3000")
     #logging in partner
-    login(user, password, chat_partner)
+    login(partner_email, partner_password, chat_partner)
     #start chat and send message
     find_user("Martin")
     browser.find_element_by_id("chat-button").click()
     active_chat = browser.find_element_by_class_name("active-chat")
     active_chat.find_element_by_class_name("chat-input").send_keys(message)
     active_chat.find_element_by_class_name("chat-post").click()
+    message_box=active_chat.find_element_by_class_name("message-container")
+    assert message in (message_box.find_element_by_xpath('./*[last()]').text)
 
-    #print the message and respond
+    #send response
     partner_chat = chat_partner.find_element_by_class_name("active-chat")
     message_box = partner_chat.find_element_by_class_name("message-container")
-    print(message_box.find_element_by_xpath('./*[last()]').text)
+    # print(message_box.find_element_by_xpath('./*[last()]').text)
     partner_chat.find_element_by_class_name("chat-input").send_keys(response)
     partner_chat.find_element_by_class_name("chat-post").click()
+    assert response in (message_box.find_element_by_xpath('./*[last()]').text)
 
     invite_dan_to_chat()
 
@@ -119,7 +128,7 @@ def invite_dan_to_chat():
     dans_browser = webdriver.WebDriver()
     dans_browser.get("localhost:3000")
     #logging in partner
-    login("danvarnamnet@gmail.com", "loppan", dans_browser)
+    login("Dan@gmail.com", "loppan", dans_browser)
     browser.find_element_by_class_name("invitebutton").click()
     time.sleep(1)
     browser.find_element_by_class_name("activefriend").click()
@@ -141,37 +150,38 @@ browser = webdriver.WebDriver()
 #Load the file with the webdriver
 browser.get("localhost:3000")
 
-#User testing
-#registration
-#user_registration("Ante", "antwa730@student.liu.se", "loppan", "lopan" )
-#user_registration("Ante Wall", "antwa730@student.liu.se", "loppan", "loppan" )
+#User testing registration
+user_registration("Martin Lidh", "Marli994@student.liu.se", "loppan")
+logout()
+user_registration("Dan Andreasson", "Dan@gmail.com", "loppan")
+logout()
+user_registration("Testus", "test@gmail.com", "loppan" )
+
 
 #login/logout
-#logout()
-login("antwa730@student.liu.se", "loppan", browser)
-#view_profile()
-#view_friends()
+logout()
+login("test@gmail.com", "loppan", browser)
+view_profile()
+view_friends()
 
 
 #testing search
 
-#find_user("Dan Andreasson")
-#find_user("finns ej")
+find_user("Martin Lidh")
+find_user("finns ej")
 
 
 #testing friend adding
-#add_friend("dan")
-#remove_friend("dan Andrea")
-#add_friend("Martin")
+add_friend("Martin")
+remove_friend("Martin")
+add_friend("Lidh")
+add_friend("dan")
 
-#view_friends()
-#view_friends_profile()
-#ball_dropping("a ball to a good friend")
-#ball_dropping("wall ball", True)
-
-
-chat("marli994@student.liu.se","loppan", "ping", "pong")
+view_friends()
+view_friends_profile()
+ball_dropping("a ball to a good friend")
+ball_dropping("wall ball", True)
 
 
-
+chat("Marli994@student.liu.se","loppan", "ping", "pong")
 
